@@ -1,0 +1,163 @@
+<html>
+<head>
+	<title>Affine transformations</title>
+
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+	<!--<script type="text/javascript" src="static/js/script.js"></script>-->
+  <script type=text/javascript src="{{ url_for('static', filename='js/script.js', version='12052017') }}">
+    
+  </script>
+
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+</head>
+
+<body onload="load();">
+	<div class="container">
+		<h1><center>Affine tranformations</center></h1>
+		<div class="row">
+
+			<div class="col-sm-4">
+   	 			<div>
+      				<button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#select_image">Select image</button>
+      				<button name="reset" class="btn btn-primary" onclick="reset();">Reset</button>
+      				<button name="run" class="btn btn-primary" id="run" >RUN</button>
+    			</div>
+    			<br>
+    			<div class="tab">
+  					<button class="tablinks" onclick="openTab(event, 'single')">Single</button>
+	  				<button class="tablinks" onclick="openTab(event, 'multiple')">Multiple</button>
+				  </div>
+
+				<div id="single" class="tabcontent">
+          <div>
+  				<div style="display: inline-block;">
+  					<input type="radio" name="input_radio" id="scaling" value="1">Scaling<br>
+  					<div class="wrap1">
+   						&nbsp;&nbsp;<input type="radio" name="Scaling" value="up" disabled="true">Upscaling<br>
+			  			&nbsp;&nbsp;<input type="radio" name="Scaling" value="down" disabled="true">Downscaling<br>  
+			  		 	 <div class="slidecontainer">
+ 							    <input name="Scaling_value"type="range" min="" max="" value="100" class="slider" id="scale" disabled="true">
+  						    <p>x: <span id="scale_value"></span></p>
+							 </div>
+			  	  </div>
+          </div>
+			  		<!--interpolation-->
+			  	<div style="display: inline-block;">
+			  		interpolation techique<br>
+			  			<input type="radio" name="interpolation" value="nearest" checked="true" >Nearest<br>
+			  			<input type="radio" name="interpolation" value="bicubic" >Bicubic<br>
+			  			<input type="radio" name="interpolation" value="bilinear" >Bilinear<br><br>
+			  	</div>
+          </div>        
+ 					<input type="radio" name="input_radio" value="2">Rotation<br>
+  					<div class="wrap2">
+  								&nbsp;&nbsp;<span>ANGLE with anticlock rotation(0-360)</span>
+  						<div class="slidecontainer">
+ 									<input  name="Rotation" type="range" min="0" max="360" value="0" class="slider" id="angle" disabled="true">
+  									<p>Angle: <span id="angle_value"></span></p>
+							</div>
+						</div>
+  				<input type="radio" name="input_radio" value="3">Translation<br>  
+  					<div class="wrap3">
+  						<div class="slidecontainer">
+ 									&nbsp;&nbsp;<input name="Translation" type="range" min="0" max="400" value="0" class="slider" id="x_rotate" disabled="true">
+  									&nbsp;&nbsp;<p>X-axis: <span id="x_rotate_value"></span></p>
+
+									&nbsp;&nbsp;<input name="Translation" type="range" min="0" max="400" value="0" class="slider" id="y_rotate" disabled="true">
+  									&nbsp;&nbsp;<p>Y-axis: <span id="y_rotate_value"></span></p>
+							</div>
+						</div>
+  					
+		    </div>
+
+				<div id="multiple" class="tabcontent">
+	  				<h3>Under Progess</h3>	
+				</div>
+			</div><!--col-sm-4-->
+			
+
+			<div class="col-sm-8">
+				<div class="row pictures">
+			      	<div class="col-sm-6" id="image_input">input image
+			      		<img src="" alt="select image" id="input_image" height="200" width="200"> 
+              </div>
+      				<div class="col-sm-6" id="image_output">output image
+                <img src=""
+                alt="select image" id="output_image" height="200" width="200">{{me}}
+              </div>
+
+    			</div>
+			</div>
+		
+
+
+	
+
+</div><!--row end-->
+
+<!-- Button trigger modal 
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>-->
+
+<!-- Modal -->
+<div class="modal fade" id="select_image" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Select image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+      <div class="modal-body">
+        <div class="row-sm-4">
+        	<ul>
+        		<li><input type="checkbox" id="img1" class="radio" value="1" name="image_id" />
+				    <label for="img1"> <img src="static/img/IMG1.png" height="100" width="100" /></label></li>
+        		<li><input type="checkbox" id="img2" class="radio" value="2" name="image_id" />
+				    <label for="img2"> <img src="static/img/IMG2.png" height="100" width="100" /></label></li>
+				    <li><input type="checkbox" id="img3" class="radio" value="3" name="image_id" />
+				    <label for="img3"> <img src="static/img/IMG3.png" height="100" width="100" /></label></li>
+			    </ul>
+   
+        </div>
+        <div class="row-sm-4">
+        	<ul>
+        		<li><input type="checkbox" id="img4" class="radio" value="4" name="image_id" />
+				    <label for="img4"> <img src="static/img/IMG4.png" height="100" width="100" /></label></li>
+        		<li><input type="checkbox" id="img5" class="radio" value="5" name="image_id" />
+				    <label for="img5"> <img src="static/img/IMG5.png" height="100" width="100" /></label></li>
+				    <li><input type="checkbox" id="img6"  class="radio" value="6" name="image_id" />
+				    <label for="img6"> <img src="static/img/IMG6.png" height="100" width="100" /></label></li>
+			    </ul>	
+        </div>
+        <div class="row-sm-4">
+        	<ul>
+        		<li><input type="checkbox" id="img7" class="radio" value="7" name="image_id" />
+				    <label for="img7"> <img src="static/img/IMG7.png" height="100" width="100" /></label></li>
+				    <li><input type="checkbox" id="img8" class="radio" value="8" name="image_id"/>
+				    <label for="img8"> <img src="static/img/IMG8.png" height="100" width="100" /></label></li>
+				    <li><input type="checkbox" id="img9" class="radio" value="9" name="image_id"/>
+				    <label for="img9"> <img src="static/img/IMG9.png" height="100" width="100" /></label></li>
+			    </ul>
+        </div>
+      </div><!--body close-->
+      <div class="modal-footer">
+     	   <button type="button" class="btn btn-primary" onclick="getImageId();" id="confirm" >Confirm</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--modal end-->
+</div><!--container-->
+
+
+</body>
+</html>
